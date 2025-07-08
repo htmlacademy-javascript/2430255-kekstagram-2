@@ -1,8 +1,8 @@
 # Личный проект «Кекстаграм»
 
 - Студент: [Иван Шуклин](https://up.htmlacademy.ru/javascript-individual/2/user/2430255).
-- Наставник: `Алексей Хапов`.
-- Проект: [Кекстаграм](https://ivanshuklin.github.io/kekstagram/)
+- Наставник: [Алексей Хапов](https://ivanshuklin.github.io/kekstagram/).
+- Проект: [Кекстаграм](https://ivanshuklin.github.io/kekstagram/).
 
 ---
 
