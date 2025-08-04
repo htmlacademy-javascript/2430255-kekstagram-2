@@ -72,7 +72,7 @@ const generateComment = (commentId) => {
 const uniquePhotoIds = generateUniqueNumbers(PHOTO_COUNT);
 const uniquePhotoNumbers = generateUniqueNumbers(PHOTO_COUNT);
 
-const createPhoto = (_, index) => {
+const createPhoto = (unused, index) => {
   const authorName = USER_NAMES[getRandomInteger(0, USER_NAMES.length - 1)];
   const commentsCount = getRandomInteger(MIN_COMMENTS, MAX_COMMENTS);
   const commentIds = generateUniqueNumbers(commentsCount, index * 100 + 1);
@@ -82,11 +82,12 @@ const createPhoto = (_, index) => {
     url: `photos/${uniquePhotoNumbers[index]}.jpg`,
     description: `Фотография от ${authorName}`,
     likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
-    comments: Array.from({ length: commentsCount }, (_, i) =>
-      generateComment(commentIds[i])
+    comments: Array.from(
+      { length: commentsCount },
+      (unusedComment, commentIndex) => generateComment(commentIds[commentIndex])
     ),
   };
 };
 
 const photoDescriptions = Array.from({ length: PHOTO_COUNT }, createPhoto);
-console.log(photoDescriptions);
+window.console.log(photoDescriptions);
