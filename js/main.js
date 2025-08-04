@@ -6,31 +6,31 @@ const MAX_COMMENTS = 30;
 const AVATAR_COUNT = 6;
 
 const USER_NAMES = [
-  "Иван",
-  "Хуан Себастьян",
-  "Мария",
-  "Кристоф",
-  "Виктор",
-  "Юлия",
-  "Люпита",
-  "Вашингтон",
-  "Марья",
-  "Верон",
-  "Мирабелла",
-  "Вальц",
-  "Онопко",
-  "Топольницкая",
-  "Нионго",
-  "Ирвинг",
+  'Иван',
+  'Хуан Себастьян',
+  'Мария',
+  'Кристоф',
+  'Виктор',
+  'Юлия',
+  'Люпита',
+  'Вашингтон',
+  'Марья',
+  'Верон',
+  'Мирабелла',
+  'Вальц',
+  'Онопко',
+  'Топольницкая',
+  'Нионго',
+  'Ирвинг',
 ];
 
 const COMMENT_MESSAGES = [
-  "Всё отлично!",
-  "В целом всё неплохо. Но не всё.",
-  "Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.",
-  "Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.",
-  "Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.",
-  "Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!",
+  'Всё отлично!',
+  'В целом всё неплохо. Но не всё.',
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
 const getRandomInteger = (a, b) => {
@@ -69,6 +69,9 @@ const generateComment = (commentId) => {
   };
 };
 
+const uniquePhotoIds = generateUniqueNumbers(PHOTO_COUNT);
+const uniquePhotoNumbers = generateUniqueNumbers(PHOTO_COUNT);
+
 const createPhoto = (_, index) => {
   const authorName = USER_NAMES[getRandomInteger(0, USER_NAMES.length - 1)];
   const commentsCount = getRandomInteger(MIN_COMMENTS, MAX_COMMENTS);
@@ -84,9 +87,6 @@ const createPhoto = (_, index) => {
     ),
   };
 };
-
-const uniquePhotoIds = generateUniqueNumbers(PHOTO_COUNT);
-const uniquePhotoNumbers = generateUniqueNumbers(PHOTO_COUNT);
 
 const photoDescriptions = Array.from({ length: PHOTO_COUNT }, createPhoto);
 console.log(photoDescriptions);

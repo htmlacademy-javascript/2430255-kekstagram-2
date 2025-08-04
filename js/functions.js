@@ -3,8 +3,8 @@ const stringLengthCheck = function (string, maxLength) {
 };
 
 const palindromeCheck = function (string) {
-  const str = string.toString().toLowerCase().replaceAll(" ", "");
-  let reversedString = "";
+  const str = string.toString().toLowerCase().replaceAll(' ', '');
+  let reversedString = '';
 
   for (let i = str.length - 1; i >= 0; i--) {
     reversedString += str[i];
@@ -14,7 +14,7 @@ const palindromeCheck = function (string) {
 };
 
 const getIntegers = function (string) {
-  let result = "";
+  let result = '';
   const str = string.toString();
 
   for (let i = 0; i < str.length; i++) {
