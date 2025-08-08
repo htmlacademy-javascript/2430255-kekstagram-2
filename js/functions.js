@@ -25,3 +25,16 @@
 
 //   return result ? parseInt(result, 10) : NaN;
 // };
+const toMinutes = (timeArray) => {
+  const [hours, minutes] = timeArray.map(Number);
+  return hours * 60 + minutes;
+};
+
+const isInWorkHours = (start, end, meet, dur) => {
+  const [startMins, endMins, meetMins] = [start, end, meet].map((time) =>
+    toMinutes(time.split(':')),
+  );
+  return meetMins >= startMins && meetMins + dur <= endMins;
+};
+
+window.console.log(isInWorkHours('08:00', '17:30', '14:00', 90));
