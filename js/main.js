@@ -1,5 +1,5 @@
-import './util.js';
+import './utils.js';
 import { photoDescriptions } from './data.js';
-import { renderPhotos } from './photos-renderer.js';
+import { initGallery } from './gallery.js';
 
-renderPhotos(photoDescriptions);
+initGallery(photoDescriptions);

@@ -5,6 +5,9 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
+const getRandomArrayElement = (elements) =>
+  elements[getRandomInteger(0, elements.length - 1)];
+
 const generateUniqueNumbers = (count, startFrom = 1) => {
   const numbers = Array.from({ length: count }, (_, i) => i + startFrom);
   for (let i = numbers.length - 1; i > 0; i--) {
@@ -14,4 +17,11 @@ const generateUniqueNumbers = (count, startFrom = 1) => {
   return numbers;
 };
 
-export { getRandomInteger, generateUniqueNumbers };
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {
+  getRandomInteger,
+  getRandomArrayElement,
+  generateUniqueNumbers,
+  isEscapeKey,
+};
