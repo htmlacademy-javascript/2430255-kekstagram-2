@@ -1,4 +1,8 @@
-import { getRandomInteger, generateUniqueNumbers } from './util.js';
+import {
+  getRandomInteger,
+  getRandomArrayElement,
+  generateUniqueNumbers,
+} from './utils.js';
 
 const PHOTO_COUNT = 25;
 const MIN_LIKES = 15;
@@ -36,11 +40,9 @@ const COMMENT_MESSAGES = [
 ];
 
 const generateComment = (commentId) => {
-  const randomName = USER_NAMES[getRandomInteger(0, USER_NAMES.length - 1)];
-  const message1 =
-    COMMENT_MESSAGES[getRandomInteger(0, COMMENT_MESSAGES.length - 1)];
-  const message2 =
-    COMMENT_MESSAGES[getRandomInteger(0, COMMENT_MESSAGES.length - 1)];
+  const randomName = getRandomArrayElement(USER_NAMES);
+  const message1 = getRandomArrayElement(COMMENT_MESSAGES);
+  const message2 = getRandomArrayElement(COMMENT_MESSAGES);
 
   const message =
     Math.random() > 0.5 && message1 !== message2
@@ -59,7 +61,7 @@ const uniquePhotoIds = generateUniqueNumbers(PHOTO_COUNT);
 const uniquePhotoNumbers = generateUniqueNumbers(PHOTO_COUNT);
 
 const createPhoto = (unused, index) => {
-  const authorName = USER_NAMES[getRandomInteger(0, USER_NAMES.length - 1)];
+  const authorName = getRandomArrayElement(USER_NAMES);
   const commentsCount = getRandomInteger(MIN_COMMENTS, MAX_COMMENTS);
   const commentIds = generateUniqueNumbers(commentsCount, index * 100 + 1);
 
