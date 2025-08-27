@@ -11,17 +11,21 @@ const commentsList = bigPicture.querySelector('.social__comments');
 const commentsCount = bigPicture.querySelector('.social__comment-total-count');
 const commentCountBlock = bigPicture.querySelector('.social__comment-count');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
+const commentsShownCount = bigPicture.querySelector(
+  '.social__comment-shown-count',
+);
 
-function renderBigPicture(photo) {
-  bigImg.src = photo.url;
-  bigImg.alt = photo.description;
-  likesCount.textContent = photo.likes;
-  caption.textContent = photo.description;
-  commentsCount.textContent = photo.comments.length;
+let allComments = [];
+let shownComments = 0;
+const COMMENTS_PER_PAGE = 5;
 
-  commentsList.innerHTML = '';
+function renderComments() {
+  const nextComments = allComments.slice(
+    shownComments,
+    shownComments + COMMENTS_PER_PAGE,
+  );
 
-  photo.comments.forEach((comment) => {
+  nextComments.forEach((comment) => {
     const li = document.createElement('li');
     li.classList.add('social__comment');
 
@@ -39,8 +43,31 @@ function renderBigPicture(photo) {
     commentsList.appendChild(li);
   });
 
-  commentCountBlock.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
+  shownComments += nextComments.length;
+  commentsCount.textContent = allComments.length;
+  commentsShownCount.textContent = shownComments;
+
+  if (shownComments >= allComments.length) {
+    commentsLoader.classList.add('hidden');
+  } else {
+    commentsLoader.classList.remove('hidden');
+  }
+}
+
+function renderBigPicture(photo) {
+  bigImg.src = photo.url;
+  bigImg.alt = photo.description;
+  likesCount.textContent = photo.likes;
+  caption.textContent = photo.description;
+
+  allComments = photo.comments;
+  shownComments = 0;
+  commentsList.innerHTML = '';
+
+  commentCountBlock.classList.remove('hidden');
+  commentsLoader.classList.remove('hidden');
+
+  renderComments();
 }
 
 function openBigPicture(photo) {
@@ -77,6 +104,7 @@ function initFullSizeMode(photos, picturesContainer) {
   });
 
   bigPictureCancel.addEventListener('click', closeBigPicture);
+  commentsLoader.addEventListener('click', renderComments);
 }
 
 export { initFullSizeMode };
