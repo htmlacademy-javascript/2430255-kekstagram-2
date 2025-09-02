@@ -2,9 +2,8 @@ import { isEscapeKey } from './utils.js';
 
 const COMMENTS_PER_PAGE = 5;
 const body = document.querySelector('body');
-const bigPicture = document.querySelector('.big-picture');
+const bigPicture = body.querySelector('.big-picture');
 const bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
-
 const bigImg = bigPicture.querySelector('.big-picture__img img');
 const likesCount = bigPicture.querySelector('.likes-count');
 const caption = bigPicture.querySelector('.social__caption');
@@ -76,18 +75,18 @@ const openBigPicture = (photo) => {
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
 
-  document.addEventListener('keydown', onDocumentKeydown);
-  bigPictureCancel.addEventListener('click', onBigPictureCancelClick);
-  commentsLoader.addEventListener('click', onCommentsLoaderClick);
+  document.addEventListener('keydown', documentKeydownHandler);
+  bigPictureCancel.addEventListener('click', bigPictureCancelHandler);
+  commentsLoader.addEventListener('click', commentsLoadHandler);
 };
 
 const closeBigPicture = () => {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
 
-  document.removeEventListener('keydown', onDocumentKeydown);
-  bigPictureCancel.removeEventListener('click', onBigPictureCancelClick);
-  commentsLoader.removeEventListener('click', onCommentsLoaderClick);
+  document.removeEventListener('keydown', documentKeydownHandler);
+  bigPictureCancel.removeEventListener('click', bigPictureCancelHandler);
+  commentsLoader.removeEventListener('click', commentsLoadHandler);
 };
 
 const initFullSizeMode = (photos, picturesContainer) => {
@@ -106,18 +105,18 @@ const initFullSizeMode = (photos, picturesContainer) => {
   });
 };
 
-function onDocumentKeydown(evt) {
+function documentKeydownHandler(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPicture();
   }
 }
 
-function onBigPictureCancelClick() {
+function bigPictureCancelHandler() {
   closeBigPicture();
 }
 
-function onCommentsLoaderClick() {
+function commentsLoadHandler() {
   renderComments();
 }
 
