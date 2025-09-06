@@ -14,33 +14,13 @@ const hashtagRegExp = /^#[a-zа-яё0-9]{1,19}$/i;
 const hashtagField = imgUploadForm.querySelector('.text__hashtags');
 const descriptionField = imgUploadForm.querySelector('.text__description');
 
-function validateDescription(value) {
-  return value.length <= 140;
-}
-
-function validateHashtag(value) {
-  if (!value) {
-    return true;
-  }
-
-  const hashtags = value
+const getHashtags = (value) =>
+  value
     .trim()
     .split(/\s+/)
     .filter((tag) => tag.length > 0);
 
-  if (hashtags.length > 5) {
-    return false;
-  }
-
-  const lowercased = hashtags.map((tag) => tag.toLowerCase());
-  const hasDuplicates = new Set(lowercased).size !== lowercased.length;
-
-  if (hasDuplicates) {
-    return false;
-  }
-
-  return hashtags.every((tag) => hashtagRegExp.test(tag));
-}
+const validateDescription = (value) => value.length <= 140;
 
 pristine.addValidator(
   descriptionField,
@@ -48,19 +28,53 @@ pristine.addValidator(
   'Длина комментария не может составлять больше 140 символов',
 );
 
+const validateHashtagFormat = (value) => {
+  if (!value) {
+    return true;
+  }
+  return getHashtags(value).every((tag) => hashtagRegExp.test(tag));
+};
+
+const validateHashtagCount = (value) => {
+  if (!value) {
+    return true;
+  }
+  return getHashtags(value).length <= 5;
+};
+
+const validateHashtagUnique = (value) => {
+  if (!value) {
+    return true;
+  }
+  const hashtags = getHashtags(value).map((tag) => tag.toLowerCase());
+  return new Set(hashtags).size === hashtags.length;
+};
+
 pristine.addValidator(
   hashtagField,
-  validateHashtag,
-  'Некорректные хэштеги. Допустимо: до 5 шт., уникальные, формат #тег',
+  validateHashtagFormat,
+  'Хэштег должен начинаться с # и содержать до 20 символов: буквы и цифры',
 );
 
-function initFormValidation() {
+pristine.addValidator(
+  hashtagField,
+  validateHashtagCount,
+  'Нельзя указать больше пяти хэштегов',
+);
+
+pristine.addValidator(
+  hashtagField,
+  validateHashtagUnique,
+  'Хэштеги не должны повторяться',
+);
+
+const initFormValidation = () => {
   imgUploadForm.addEventListener('submit', (evt) => {
     const isValid = pristine.validate();
     if (!isValid) {
       evt.preventDefault();
     }
   });
-}
+};
 
 export { initFormValidation };
