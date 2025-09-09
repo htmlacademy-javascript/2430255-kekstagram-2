@@ -1,5 +1,7 @@
 import { isEscapeKey } from './utils';
 import { initFormValidation } from './form-validation';
+import { resetEffects } from './upload-slider';
+import { initScale, resetScale } from './upload-scale';
 
 const body = document.querySelector('body');
 const imgUploadForm = body.querySelector('.img-upload__form');
@@ -13,6 +15,8 @@ const openForm = () => {
 
   document.addEventListener('keydown', documentKeydownHandler);
   imgUploadCancel.addEventListener('click', imgUploadCancelHandler);
+
+  initScale();
 };
 
 const closeForm = () => {
@@ -23,6 +27,8 @@ const closeForm = () => {
   imgUploadCancel.removeEventListener('click', imgUploadCancelHandler);
 
   imgUploadForm.reset();
+  resetEffects();
+  resetScale();
 };
 
 function documentKeydownHandler(evt) {
