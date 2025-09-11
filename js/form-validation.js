@@ -1,3 +1,7 @@
+const MAX_DESCRIPTION_LENGTH = 140;
+const MAX_HASHTAGS_COUNT = 5;
+const MAX_HASHTAG_LENGTH = 20;
+
 const imgUploadForm = document.querySelector('.img-upload__form');
 
 const pristine = new Pristine(imgUploadForm, {
@@ -14,53 +18,71 @@ const hashtagRegExp = /^#[a-zа-яё0-9]{1,19}$/i;
 const hashtagField = imgUploadForm.querySelector('.text__hashtags');
 const descriptionField = imgUploadForm.querySelector('.text__description');
 
-function validateDescription(value) {
-  return value.length <= 140;
-}
-
-function validateHashtag(value) {
-  if (!value) {
-    return true;
-  }
-
-  const hashtags = value
+const getHashtags = (value) =>
+  value
     .trim()
     .split(/\s+/)
     .filter((tag) => tag.length > 0);
 
-  if (hashtags.length > 5) {
+const validateDescription = (value) => value.length <= MAX_DESCRIPTION_LENGTH;
+
+const validateHashtags = (value) => {
+  if (!value) {
+    return true;
+  }
+
+  const hashtags = getHashtags(value);
+
+  if (hashtags.length > MAX_HASHTAGS_COUNT) {
     return false;
   }
 
-  const lowercased = hashtags.map((tag) => tag.toLowerCase());
-  const hasDuplicates = new Set(lowercased).size !== lowercased.length;
-
-  if (hasDuplicates) {
+  if (!hashtags.every((tag) => hashtagRegExp.test(tag))) {
     return false;
   }
 
-  return hashtags.every((tag) => hashtagRegExp.test(tag));
-}
+  const lowerCaseTags = hashtags.map((tag) => tag.toLowerCase());
+  if (new Set(lowerCaseTags).size !== lowerCaseTags.length) {
+    return false;
+  }
+
+  return true;
+};
+
+const getHashtagsErrorMessage = (value) => {
+  const hashtags = getHashtags(value);
+
+  if (hashtags.length > MAX_HASHTAGS_COUNT) {
+    return `Нельзя указать больше ${MAX_HASHTAGS_COUNT} хэштегов`;
+  }
+
+  if (!hashtags.every((tag) => hashtagRegExp.test(tag))) {
+    return `Хэштег должен начинаться с # и содержать до ${MAX_HASHTAG_LENGTH} символов: буквы и цифры`;
+  }
+
+  const lowerCaseTags = hashtags.map((tag) => tag.toLowerCase());
+  if (new Set(lowerCaseTags).size !== lowerCaseTags.length) {
+    return 'Хэштеги не должны повторяться';
+  }
+
+  return true;
+};
 
 pristine.addValidator(
   descriptionField,
   validateDescription,
-  'Длина комментария не может составлять больше 140 символов',
+  `Длина комментария не может составлять больше ${MAX_DESCRIPTION_LENGTH} символов`,
 );
 
-pristine.addValidator(
-  hashtagField,
-  validateHashtag,
-  'Некорректные хэштеги. Допустимо: до 5 шт., уникальные, формат #тег',
-);
+pristine.addValidator(hashtagField, validateHashtags, getHashtagsErrorMessage);
 
-function initFormValidation() {
+const initFormValidation = () => {
   imgUploadForm.addEventListener('submit', (evt) => {
     const isValid = pristine.validate();
     if (!isValid) {
       evt.preventDefault();
     }
   });
-}
+};
 
 export { initFormValidation };
