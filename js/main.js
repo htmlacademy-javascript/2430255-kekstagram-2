@@ -1,8 +1,18 @@
 import './utils.js';
-import { photoDescriptions } from './data.js';
 import { initGallery } from './gallery.js';
 import { initUploadForm } from './upload-form.js';
 import './upload-slider.js';
+import { getData } from './api.js';
 
-initGallery(photoDescriptions);
-initUploadForm();
+const initApp = async () => {
+  try {
+    const userPhotos = await getData();
+    initGallery(userPhotos);
+  } catch (err) {
+    window.console.error('Ошибка загрузки данных:', err.message);
+  }
+
+  initUploadForm();
+};
+
+initApp();

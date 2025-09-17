@@ -42,11 +42,8 @@ const validateHashtags = (value) => {
   }
 
   const lowerCaseTags = hashtags.map((tag) => tag.toLowerCase());
-  if (new Set(lowerCaseTags).size !== lowerCaseTags.length) {
-    return false;
-  }
 
-  return true;
+  return new Set(lowerCaseTags).size === lowerCaseTags.length;
 };
 
 const getHashtagsErrorMessage = (value) => {
@@ -76,13 +73,6 @@ pristine.addValidator(
 
 pristine.addValidator(hashtagField, validateHashtags, getHashtagsErrorMessage);
 
-const initFormValidation = () => {
-  imgUploadForm.addEventListener('submit', (evt) => {
-    const isValid = pristine.validate();
-    if (!isValid) {
-      evt.preventDefault();
-    }
-  });
-};
+const initFormValidation = () => pristine;
 
 export { initFormValidation };
