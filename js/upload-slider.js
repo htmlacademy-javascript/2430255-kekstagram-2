@@ -89,8 +89,6 @@ effectsFieldset.addEventListener('change', (evt) => {
 const resetEffects = () => {
   const defaultEffect = EFFECTS.none;
 
-  document.querySelector('#effect-none').checked = true;
-
   sliderElement.noUiSlider.updateOptions({
     range: defaultEffect.range,
     start: defaultEffect.start,
@@ -98,7 +96,6 @@ const resetEffects = () => {
   });
 
   imgPreview.style.filter = 'none';
-  valueElement.value = defaultEffect.start;
   effectLevel.classList.add('hidden');
 };
 
