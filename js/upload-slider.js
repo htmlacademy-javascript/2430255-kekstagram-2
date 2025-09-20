@@ -43,11 +43,11 @@ const EFFECTS = {
   },
 };
 
-const imgPreview = document.querySelector('.img-upload__preview img');
+const imgPreviewElement = document.querySelector('.img-upload__preview img');
 const valueElement = document.querySelector('.effect-level__value');
 const sliderElement = document.querySelector('.effect-level__slider');
-const effectLevel = document.querySelector('.img-upload__effect-level');
-const effectsFieldset = document.querySelector('.effects');
+const effectLevelElement = document.querySelector('.img-upload__effect-level');
+const effectsFieldsetElement = document.querySelector('.effects');
 
 noUiSlider.create(sliderElement, {
   range: EFFECTS.none.range,
@@ -56,23 +56,23 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
 });
 
-effectLevel.classList.add('hidden');
+effectLevelElement.classList.add('hidden');
 
 sliderElement.noUiSlider.on('update', (values, handle) => {
   valueElement.value = values[handle];
   const effect = document.querySelector('.effects__radio:checked').value;
-  imgPreview.style.filter =
+  imgPreviewElement.style.filter =
     effect === 'none' ? '' : EFFECTS[effect].filter(values[handle]);
 });
 
-effectsFieldset.addEventListener('change', (evt) => {
+effectsFieldsetElement.addEventListener('change', (evt) => {
   const effect = EFFECTS[evt.target.value];
 
   if (evt.target.value === 'none') {
-    imgPreview.style.filter = 'none';
-    effectLevel.classList.add('hidden');
+    imgPreviewElement.style.filter = 'none';
+    effectLevelElement.classList.add('hidden');
   } else {
-    effectLevel.classList.remove('hidden');
+    effectLevelElement.classList.remove('hidden');
 
     sliderElement.noUiSlider.updateOptions({
       range: effect.range,
@@ -80,7 +80,7 @@ effectsFieldset.addEventListener('change', (evt) => {
       step: effect.step,
     });
 
-    imgPreview.style.filter = effect.filter(effect.start);
+    imgPreviewElement.style.filter = effect.filter(effect.start);
   }
 
   valueElement.value = effect.start;
@@ -95,8 +95,8 @@ const resetEffects = () => {
     step: defaultEffect.step,
   });
 
-  imgPreview.style.filter = 'none';
-  effectLevel.classList.add('hidden');
+  imgPreviewElement.style.filter = 'none';
+  effectLevelElement.classList.add('hidden');
 };
 
 export { resetEffects };

@@ -1,9 +1,9 @@
-import { renderPhotos, photosContainer } from './photos-renderer.js';
+import { renderPhotos, photosContainerElement } from './photos-renderer.js';
 import { initFullSizeMode } from './fullsize-mode.js';
 
-function initGallery(photos) {
+const initGallery = (photos) => {
   renderPhotos(photos);
-  initFullSizeMode(photos, photosContainer);
-}
+  initFullSizeMode(photos, photosContainerElement);
+};
 
 export { initGallery };

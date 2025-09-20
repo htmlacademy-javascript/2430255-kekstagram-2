@@ -2,9 +2,13 @@ const MAX_DESCRIPTION_LENGTH = 140;
 const MAX_HASHTAGS_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
 
-const imgUploadForm = document.querySelector('.img-upload__form');
+const imgUploadFormElement = document.querySelector('.img-upload__form');
+const hashtagFieldElement =
+  imgUploadFormElement.querySelector('.text__hashtags');
+const descriptionFieldElement =
+  imgUploadFormElement.querySelector('.text__description');
 
-const pristine = new Pristine(imgUploadForm, {
+const pristine = new Pristine(imgUploadFormElement, {
   classTo: 'img-upload__field-wrapper',
   errorClass: 'img-upload__field-wrapper--error',
   successClass: 'img-upload__field-wrapper--success',
@@ -14,9 +18,6 @@ const pristine = new Pristine(imgUploadForm, {
 });
 
 const hashtagRegExp = /^#[a-zа-яё0-9]{1,19}$/i;
-
-const hashtagField = imgUploadForm.querySelector('.text__hashtags');
-const descriptionField = imgUploadForm.querySelector('.text__description');
 
 const getHashtags = (value) =>
   value
@@ -66,12 +67,16 @@ const getHashtagsErrorMessage = (value) => {
 };
 
 pristine.addValidator(
-  descriptionField,
+  descriptionFieldElement,
   validateDescription,
   `Длина комментария не может составлять больше ${MAX_DESCRIPTION_LENGTH} символов`,
 );
 
-pristine.addValidator(hashtagField, validateHashtags, getHashtagsErrorMessage);
+pristine.addValidator(
+  hashtagFieldElement,
+  validateHashtags,
+  getHashtagsErrorMessage,
+);
 
 const initFormValidation = () => pristine;
 
