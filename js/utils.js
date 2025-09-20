@@ -1,3 +1,5 @@
+const DEBOUNCE_DELAY = 500;
+
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -13,9 +15,18 @@ const generateUniqueNumbers = (count, startFrom = 1) =>
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+function debounce(callback, timeoutDelay = DEBOUNCE_DELAY) {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
 export {
   getRandomInteger,
   getRandomArrayElement,
   generateUniqueNumbers,
   isEscapeKey,
+  debounce,
 };

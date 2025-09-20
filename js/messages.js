@@ -1,14 +1,21 @@
-const successTemplate = document.querySelector('#success');
-const errorTemplate = document.querySelector('#error');
+const successTemplateElement = document.querySelector('#success');
+const errorTemplateElement = document.querySelector('#error');
 
-const createMessage = (template) => {
-  if (!template) {
+let messageElement = null;
+
+const createMessage = (
+  templateElement,
+  { onOpen = () => {}, onClose = () => {} } = {},
+) => {
+  if (!templateElement) {
     return;
   }
 
-  const fragment = template.content.cloneNode(true);
-  const messageElement = fragment.firstElementChild;
+  const fragment = templateElement.content.cloneNode(true);
+  messageElement = fragment.firstElementChild;
   document.body.append(messageElement);
+
+  onOpen();
 
   const onEscKeydown = (evt) => {
     if (evt.key === 'Escape') {
@@ -17,7 +24,7 @@ const createMessage = (template) => {
     }
   };
 
-  const onClick = (evt) => {
+  const onMessageClick = (evt) => {
     if (evt.target === messageElement || evt.target.closest('button')) {
       closeMessage();
     }
@@ -25,15 +32,21 @@ const createMessage = (template) => {
 
   function closeMessage() {
     document.removeEventListener('keydown', onEscKeydown);
-    messageElement.removeEventListener('click', onClick);
+    messageElement.removeEventListener('click', onMessageClick);
     messageElement.remove();
+    messageElement = null;
+
+    onClose();
   }
 
   document.addEventListener('keydown', onEscKeydown);
-  messageElement.addEventListener('click', onClick);
+  messageElement.addEventListener('click', onMessageClick);
 
   return messageElement;
 };
 
-export const showSuccessMessage = () => createMessage(successTemplate);
-export const showErrorMessage = () => createMessage(errorTemplate);
+export const showSuccessMessage = (callbacks) =>
+  createMessage(successTemplateElement, callbacks);
+
+export const showErrorMessage = (callbacks) =>
+  createMessage(errorTemplateElement, callbacks);

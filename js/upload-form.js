@@ -1,16 +1,23 @@
 import { isEscapeKey } from './utils.js';
 import { initFormValidation } from './form-validation.js';
 import { resetEffects } from './upload-slider.js';
-import { initScale, resetScale } from './upload-scale.js';
+import { initScale, resetScale, destroyScale } from './upload-scale.js';
 import { sendData } from './api.js';
-import { showErrorMessage, showSuccessMessage } from './messages.js';
+import { showSuccessMessage, showErrorMessage } from './messages.js';
 
-const body = document.querySelector('body');
-const imgUploadForm = body.querySelector('.img-upload__form');
-const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
-const imgUploadInput = imgUploadForm.querySelector('.img-upload__input');
-const imgUploadCancel = imgUploadForm.querySelector('.img-upload__cancel');
-const submitButton = imgUploadForm.querySelector('.img-upload__submit');
+const bodyElement = document.querySelector('body');
+const imgUploadFormElement = bodyElement.querySelector('.img-upload__form');
+const imgUploadOverlayElement = imgUploadFormElement.querySelector(
+  '.img-upload__overlay',
+);
+const imgUploadInputElement =
+  imgUploadFormElement.querySelector('.img-upload__input');
+const imgUploadCancelElement = imgUploadOverlayElement.querySelector(
+  '.img-upload__cancel',
+);
+const submitButtonElement = imgUploadFormElement.querySelector(
+  '.img-upload__submit',
+);
 
 const pristine = initFormValidation();
 
@@ -19,74 +26,92 @@ const SubmitButtonText = {
   SENDING: 'Публикую...',
 };
 
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
+const toggleSubmitButton = (isDisabled) => {
+  submitButtonElement.disabled = isDisabled;
+  submitButtonElement.textContent = isDisabled
+    ? SubmitButtonText.SENDING
+    : SubmitButtonText.IDLE;
 };
 
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
-};
-
-const openForm = () => {
-  imgUploadOverlay.classList.remove('hidden');
-  body.classList.add('modal-open');
-
+const addDocumentKeydownHandler = () => {
   document.addEventListener('keydown', documentKeydownHandler);
-  imgUploadCancel.addEventListener('click', imgUploadCancelHandler);
-
-  initScale();
 };
 
-const closeForm = () => {
-  imgUploadOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-
+const removeDocumentKeydownHandler = () => {
   document.removeEventListener('keydown', documentKeydownHandler);
-  imgUploadCancel.removeEventListener('click', imgUploadCancelHandler);
+};
 
-  imgUploadForm.reset();
+const closeUploadOverlay = () => {
+  imgUploadOverlayElement.classList.add('hidden');
+  bodyElement.classList.remove('modal-open');
+  removeDocumentKeydownHandler();
+  imgUploadCancelElement.removeEventListener('click', imgUploadCancelHandler);
+  imgUploadFormElement.reset();
+  imgUploadInputElement.value = '';
   resetEffects();
   resetScale();
   pristine.reset();
+  destroyScale();
+  toggleSubmitButton(false);
+};
+
+const openUploadOverlay = () => {
+  imgUploadOverlayElement.classList.remove('hidden');
+  bodyElement.classList.add('modal-open');
+  pristine.reset();
+  toggleSubmitButton(false);
+  addDocumentKeydownHandler();
+  imgUploadCancelElement.addEventListener('click', imgUploadCancelHandler);
+  initScale();
 };
 
 function documentKeydownHandler(evt) {
-  if (isEscapeKey(evt)) {
+  if (
+    isEscapeKey(evt) &&
+    !evt.target.closest('.text__hashtags') &&
+    !evt.target.closest('.text__description')
+  ) {
     evt.preventDefault();
-    closeForm();
+    closeUploadOverlay();
   }
 }
 
 function imgUploadCancelHandler() {
-  closeForm();
+  closeUploadOverlay();
 }
 
 const initUploadForm = () => {
-  imgUploadInput.addEventListener('change', openForm);
+  imgUploadInputElement.addEventListener('change', openUploadOverlay);
 
-  imgUploadForm.addEventListener('submit', async (evt) => {
+  imgUploadFormElement.addEventListener('submit', async (evt) => {
     evt.preventDefault();
 
-    if (!pristine.validate()) {
+    const isValid = pristine.validate();
+    if (!isValid) {
       return;
     }
 
-    blockSubmitButton();
-
+    toggleSubmitButton(true);
     const formData = new FormData(evt.target);
 
     try {
       await sendData(formData);
-      closeForm();
+      closeUploadOverlay();
       showSuccessMessage();
-    } catch (error) {
-      showErrorMessage();
+    } catch (err) {
+      showErrorMessage({
+        onOpen: removeDocumentKeydownHandler,
+        onClose: addDocumentKeydownHandler,
+      });
     } finally {
-      unblockSubmitButton();
+      toggleSubmitButton(false);
     }
   });
 };
 
-export { initUploadForm };
+export {
+  initUploadForm,
+  addDocumentKeydownHandler,
+  removeDocumentKeydownHandler,
+  closeUploadOverlay,
+};
