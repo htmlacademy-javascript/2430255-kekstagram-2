@@ -1,7 +1,4 @@
-const SCALE_STEP = 25;
-const SCALE_MIN = 25;
-const SCALE_MAX = 100;
-const SCALE_DEFAULT = 100;
+import { SCALE_STEP, SCALE_MIN, SCALE_MAX, SCALE_DEFAULT } from './const';
 
 const smallerButtonElement = document.querySelector('.scale__control--smaller');
 const biggerButtonElement = document.querySelector('.scale__control--bigger');

@@ -17,30 +17,30 @@ const createMessage = (
 
   onOpen();
 
-  const onEscKeydown = (evt) => {
+  const escKeydownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
       closeMessage();
     }
   };
 
-  const onMessageClick = (evt) => {
+  const messageClickHandler = (evt) => {
     if (evt.target === messageElement || evt.target.closest('button')) {
       closeMessage();
     }
   };
 
   function closeMessage() {
-    document.removeEventListener('keydown', onEscKeydown);
-    messageElement.removeEventListener('click', onMessageClick);
+    document.removeEventListener('keydown', escKeydownHandler);
+    messageElement.removeEventListener('click', messageClickHandler);
     messageElement.remove();
     messageElement = null;
 
     onClose();
   }
 
-  document.addEventListener('keydown', onEscKeydown);
-  messageElement.addEventListener('click', onMessageClick);
+  document.addEventListener('keydown', escKeydownHandler);
+  messageElement.addEventListener('click', messageClickHandler);
 
   return messageElement;
 };
