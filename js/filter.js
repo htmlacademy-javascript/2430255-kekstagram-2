@@ -1,19 +1,11 @@
 import { debounce } from './utils';
 import { renderPhotos } from './photos-renderer';
-
-const FILTER_IDS = {
-  DEFAULT: 'filter-default',
-  RANDOM: 'filter-random',
-  DISCUSSED: 'filter-discussed',
-};
-
-const SORTFUNC = {
-  random: () => 0.5 - Math.random(),
-  discussed: (a, b) => b.comments.length - a.comments.length,
-};
-
-const MAX_PICTURE_COUNT = 10;
-const ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
+import {
+  FILTER_IDS,
+  SORTFUNC,
+  MAX_PICTURE_COUNT,
+  ACTIVE_BUTTON_CLASS,
+} from './const';
 
 const filterElement = document.querySelector('.img-filters');
 let pictures = [];
