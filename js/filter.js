@@ -1,25 +1,32 @@
 import { debounce } from './utils';
 import { renderPhotos } from './photos-renderer';
-import {
-  FILTER_IDS,
-  SORTFUNC,
-  MAX_PICTURE_COUNT,
-  ACTIVE_BUTTON_CLASS,
-} from './const';
+
+const FILTER_IDS = {
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed',
+};
+
+const SORTFUNC = {
+  random: () => 0.5 - Math.random(),
+  discussed: (a, b) => b.comments.length - a.comments.length,
+};
+
+const MAX_PICTURE_COUNT = 10;
+const ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
 
 const filterElement = document.querySelector('.img-filters');
 let pictures = [];
+let activeButtonElement = null;
 
 const debounceRender = debounce(renderPhotos);
 
 const applyFilter = () => {
-  if (!filterElement) {
+  if (!filterElement || !activeButtonElement) {
     return;
   }
 
-  const activeButton = filterElement.querySelector(`.${ACTIVE_BUTTON_CLASS}`);
-  const currentId = activeButton ? activeButton.id : FILTER_IDS.DEFAULT;
-
+  const currentId = activeButtonElement.id;
   let filtered = pictures.slice();
 
   if (currentId === FILTER_IDS.RANDOM) {
@@ -32,20 +39,20 @@ const applyFilter = () => {
 };
 
 const filterClickHandler = (evt) => {
-  const button = evt.target.closest('button');
-  if (!button || !filterElement.contains(button)) {
+  const buttonElement = evt.target.closest('button');
+  if (!buttonElement || !filterElement.contains(buttonElement)) {
     return;
   }
 
-  const activeButton = filterElement.querySelector(`.${ACTIVE_BUTTON_CLASS}`);
-  if (activeButton === button) {
+  if (activeButtonElement === buttonElement) {
     return;
   }
 
-  if (activeButton) {
-    activeButton.classList.remove(ACTIVE_BUTTON_CLASS);
+  if (activeButtonElement) {
+    activeButtonElement.classList.remove(ACTIVE_BUTTON_CLASS);
   }
-  button.classList.add(ACTIVE_BUTTON_CLASS);
+  buttonElement.classList.add(ACTIVE_BUTTON_CLASS);
+  activeButtonElement = buttonElement;
 
   applyFilter();
 };
@@ -59,15 +66,17 @@ const configFilter = (picturesData) => {
 
   filterElement.classList.remove('img-filters--inactive');
 
-  const defaultButton = filterElement.querySelector(`#${FILTER_IDS.DEFAULT}`);
-  if (defaultButton) {
+  const defaultButtonElement = filterElement.querySelector(
+    `#${FILTER_IDS.DEFAULT}`,
+  );
+  if (defaultButtonElement) {
     filterElement
       .querySelectorAll('button')
       .forEach((btn) => btn.classList.remove(ACTIVE_BUTTON_CLASS));
-    defaultButton.classList.add(ACTIVE_BUTTON_CLASS);
+    defaultButtonElement.classList.add(ACTIVE_BUTTON_CLASS);
+    activeButtonElement = defaultButtonElement;
   }
 
-  filterElement.removeEventListener('click', filterClickHandler);
   filterElement.addEventListener('click', filterClickHandler);
 
   applyFilter();

@@ -1,8 +1,6 @@
-import {
-  MAX_DESCRIPTION_LENGTH,
-  MAX_HASHTAGS_COUNT,
-  MAX_HASHTAG_LENGTH,
-} from './const';
+const MAX_DESCRIPTION_LENGTH = 140;
+const MAX_HASHTAGS_COUNT = 5;
+const MAX_HASHTAG_LENGTH = 20;
 
 const imgUploadFormElement = document.querySelector('.img-upload__form');
 const hashtagFieldElement =

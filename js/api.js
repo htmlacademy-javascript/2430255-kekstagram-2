@@ -1,5 +1,4 @@
-import { BASE_URL } from './const';
-
+const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 const Route = {
   GET_DATA: '/data',
   SEND_DATA: '/',

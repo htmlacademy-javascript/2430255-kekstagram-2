@@ -1,4 +1,4 @@
-import { DEBOUNCE_DELAY } from './const';
+const DEBOUNCE_DELAY = 500;
 
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
