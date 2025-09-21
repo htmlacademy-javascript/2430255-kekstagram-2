@@ -1,4 +1,47 @@
-import { EFFECTS } from './const';
+const EFFECTS = {
+  none: {
+    range: { min: 0, max: 100 },
+    start: 100,
+    step: 1,
+    filter: () => 'none',
+    unit: '',
+  },
+  chrome: {
+    range: { min: 0, max: 1 },
+    start: 1,
+    step: 0.1,
+    filter: (value) => `grayscale(${value})`,
+    unit: '',
+  },
+  sepia: {
+    range: { min: 0, max: 1 },
+    start: 1,
+    step: 0.1,
+    filter: (value) => `sepia(${value})`,
+    unit: '',
+  },
+  marvin: {
+    range: { min: 0, max: 100 },
+    start: 100,
+    step: 1,
+    filter: (value) => `invert(${value}%)`,
+    unit: '%',
+  },
+  phobos: {
+    range: { min: 0, max: 3 },
+    start: 3,
+    step: 0.1,
+    filter: (value) => `blur(${value}px)`,
+    unit: 'px',
+  },
+  heat: {
+    range: { min: 1, max: 3 },
+    start: 3,
+    step: 0.1,
+    filter: (value) => `brightness(${value})`,
+    unit: '',
+  },
+};
 
 const imgPreviewElement = document.querySelector('.img-upload__preview img');
 const valueElement = document.querySelector('.effect-level__value');

@@ -1,10 +1,11 @@
 import { isEscapeKey } from './utils.js';
 import { initFormValidation } from './form-validation.js';
 import { resetEffects } from './upload-slider.js';
-import { initScale, resetScale, destroyScale } from './upload-scale.js';
+import { initScale, resetScale } from './upload-scale.js';
 import { sendData } from './api.js';
 import { showSuccessMessage, showErrorMessage } from './messages.js';
-import { FILE_TYPES } from './const.js';
+
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const bodyElement = document.querySelector('body');
 const imgUploadFormElement = bodyElement.querySelector('.img-upload__form');
@@ -23,6 +24,8 @@ const defaultPreviewSrc = imgPreviewElement.src;
 const submitButtonElement = imgUploadFormElement.querySelector(
   '.img-upload__submit',
 );
+const effectsPreviewElements =
+  imgUploadOverlayElement.querySelectorAll('.effects__preview');
 
 const pristine = initFormValidation();
 
@@ -46,6 +49,13 @@ const removeDocumentKeydownHandler = () => {
   document.removeEventListener('keydown', documentKeydownHandler);
 };
 
+const resetPreview = () => {
+  imgPreviewElement.src = defaultPreviewSrc;
+  effectsPreviewElements.forEach((preview) => {
+    preview.style.backgroundImage = '';
+  });
+};
+
 const closeUploadOverlay = () => {
   imgUploadOverlayElement.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
@@ -54,10 +64,10 @@ const closeUploadOverlay = () => {
   imgUploadFormElement.reset();
   imgUploadInputElement.value = '';
   imgPreviewElement.src = defaultPreviewSrc;
+  resetPreview();
   resetEffects();
   resetScale();
   pristine.reset();
-  destroyScale();
   toggleSubmitButton(false);
 };
 
@@ -96,7 +106,13 @@ function imgUploadInputChangeHandler() {
   const isValidType = FILE_TYPES.some((ext) => fileName.endsWith(ext));
 
   if (isValidType) {
-    imgPreviewElement.src = URL.createObjectURL(file);
+    const fileUrl = URL.createObjectURL(file);
+
+    imgPreviewElement.src = fileUrl;
+    effectsPreviewElements.forEach((preview) => {
+      preview.style.backgroundImage = `url(${fileUrl})`;
+    });
+
     openUploadOverlay();
   } else {
     imgUploadInputElement.value = '';

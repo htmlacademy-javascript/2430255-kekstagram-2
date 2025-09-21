@@ -1,5 +1,6 @@
 import { isEscapeKey } from './utils.js';
-import { COMMENTS_PER_PAGE } from './const.js';
+
+const COMMENTS_PER_PAGE = 5;
 
 const bodyElement = document.querySelector('body');
 const bigPictureElement = bodyElement.querySelector('.big-picture');
