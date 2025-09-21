@@ -1,5 +1,5 @@
-import { debounce } from './utils';
-import { renderPhotos } from './photos-renderer';
+import { debounce } from './utils.js';
+import { renderPhotos } from './photos-renderer.js';
 
 const FILTER_IDS = {
   DEFAULT: 'filter-default',
