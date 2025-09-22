@@ -1,5 +1,6 @@
 const successTemplateElement = document.querySelector('#success');
 const errorTemplateElement = document.querySelector('#error');
+const dataErrorTemplateElement = document.querySelector('#data-error');
 
 let messageElement = null;
 
@@ -50,3 +51,16 @@ export const showSuccessMessage = (callbacks) =>
 
 export const showErrorMessage = (callbacks) =>
   createMessage(errorTemplateElement, callbacks);
+
+export const showDataErrorMessage = () => {
+  if (!dataErrorTemplateElement) {
+    return;
+  }
+
+  const fragment = dataErrorTemplateElement.content.cloneNode(true);
+  const message = fragment.firstElementChild;
+
+  document.body.append(message);
+
+  return message;
+};

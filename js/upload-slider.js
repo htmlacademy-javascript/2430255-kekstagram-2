@@ -59,7 +59,8 @@ noUiSlider.create(sliderElement, {
 effectLevelElement.classList.add('hidden');
 
 sliderElement.noUiSlider.on('update', (values, handle) => {
-  valueElement.value = values[handle];
+  const value = parseFloat(values[handle]);
+  valueElement.value = value;
   const effect = document.querySelector('.effects__radio:checked').value;
   imgPreviewElement.style.filter =
     effect === 'none' ? '' : EFFECTS[effect].filter(values[handle]);

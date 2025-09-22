@@ -7,7 +7,7 @@ const FILTER_IDS = {
   DISCUSSED: 'filter-discussed',
 };
 
-const SORTFUNC = {
+const SORT_FUNC = {
   random: () => 0.5 - Math.random(),
   discussed: (a, b) => b.comments.length - a.comments.length,
 };
@@ -30,9 +30,9 @@ const applyFilter = () => {
   let filtered = pictures.slice();
 
   if (currentId === FILTER_IDS.RANDOM) {
-    filtered = filtered.sort(SORTFUNC.random).slice(0, MAX_PICTURE_COUNT);
+    filtered = filtered.sort(SORT_FUNC.random).slice(0, MAX_PICTURE_COUNT);
   } else if (currentId === FILTER_IDS.DISCUSSED) {
-    filtered = filtered.sort(SORTFUNC.discussed);
+    filtered = filtered.sort(SORT_FUNC.discussed);
   }
 
   debounceRender(filtered);
