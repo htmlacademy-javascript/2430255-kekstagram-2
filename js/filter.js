@@ -8,8 +8,8 @@ const FILTER_IDS = {
 };
 
 const SORT_FUNC = {
-  random: () => 0.5 - Math.random(),
-  discussed: (a, b) => b.comments.length - a.comments.length,
+  sortRandomly: () => 0.5 - Math.random(),
+  sortByComments: (a, b) => b.comments.length - a.comments.length,
 };
 
 const MAX_PICTURE_COUNT = 10;
@@ -57,7 +57,7 @@ const filterClickHandler = (evt) => {
   applyFilter();
 };
 
-const configFilter = (picturesData) => {
+const setupFilter = (picturesData) => {
   if (!filterElement) {
     return;
   }
@@ -82,4 +82,4 @@ const configFilter = (picturesData) => {
   applyFilter();
 };
 
-export { configFilter };
+export { setupFilter };

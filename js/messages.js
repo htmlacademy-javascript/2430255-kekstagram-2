@@ -1,3 +1,5 @@
+const DATA_ERROR_MESSAGE_TIMEOUT = 5000;
+
 const successTemplateElement = document.querySelector('#success');
 const errorTemplateElement = document.querySelector('#error');
 const dataErrorTemplateElement = document.querySelector('#data-error');
@@ -64,7 +66,7 @@ export const showDataErrorMessage = () => {
 
   setTimeout(() => {
     message.remove();
-  }, 5000);
+  }, DATA_ERROR_MESSAGE_TIMEOUT);
 
   return message;
 };
