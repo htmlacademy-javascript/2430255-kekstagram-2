@@ -62,5 +62,9 @@ export const showDataErrorMessage = () => {
 
   document.body.append(message);
 
+  setTimeout(() => {
+    message.remove();
+  }, 5000);
+
   return message;
 };
