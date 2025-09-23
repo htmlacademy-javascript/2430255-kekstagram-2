@@ -30,9 +30,11 @@ const applyFilter = () => {
   let filtered = pictures.slice();
 
   if (currentId === FILTER_IDS.RANDOM) {
-    filtered = filtered.sort(SORT_FUNC.random).slice(0, MAX_PICTURE_COUNT);
+    filtered = filtered
+      .sort(SORT_FUNC.sortRandomly)
+      .slice(0, MAX_PICTURE_COUNT);
   } else if (currentId === FILTER_IDS.DISCUSSED) {
-    filtered = filtered.sort(SORT_FUNC.discussed);
+    filtered = filtered.sort(SORT_FUNC.sortByComments);
   }
 
   debounceRender(filtered);
